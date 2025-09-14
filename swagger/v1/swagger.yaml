@@ -1,0 +1,532 @@
+---
+openapi: 3.0.1
+info:
+  title: E-commerce API
+  description: API para gerenciamento de produtos e carrinho de compras
+  version: v1
+  contact:
+    name: Suporte API
+    email: suporte@example.com
+paths:
+  "/cart":
+    get:
+      summary: Visualiza o carrinho atual
+      tags:
+      - Carrinho
+      description: Retorna o conteúdo do carrinho da sessão atual
+      responses:
+        '200':
+          description: Carrinho vazio
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: Produto Exemplo
+                        quantity:
+                          type: integer
+                          example: 2
+                        unit_price:
+                          type: number
+                          format: float
+                          example: 29.99
+                        total_price:
+                          type: number
+                          format: float
+                          example: 59.98
+                  total_price:
+                    type: number
+                    format: float
+                    example: 59.98
+                  message:
+                    type: string
+                    example: Carrinho vazio
+        '404':
+          description: Carrinho não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Carrinho não encontrado
+    post:
+      summary: Cria um carrinho e adiciona produto
+      tags:
+      - Carrinho
+      description: Cria um novo carrinho ou usa o existente e adiciona um produto
+      parameters: []
+      responses:
+        '200':
+          description: Produto adicionado ao carrinho
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: Smartphone XYZ
+                        quantity:
+                          type: integer
+                          example: 2
+                        unit_price:
+                          type: number
+                          format: float
+                          example: 899.99
+                        total_price:
+                          type: number
+                          format: float
+                          example: 1799.98
+                  total_price:
+                    type: number
+                    format: float
+                    example: 1799.98
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: O produto não foi encontrado
+        '422':
+          description: Quantidade inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: A quantidade deve ser maior que zero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  example: 1
+                  description: ID do produto a ser adicionado
+                quantity:
+                  type: integer
+                  example: 2
+                  description: Quantidade do produto
+              required:
+              - product_id
+              - quantity
+  "/cart/add_items":
+    post:
+      summary: Adiciona itens ao carrinho existente
+      tags:
+      - Carrinho
+      description: Adiciona mais itens de um produto ao carrinho existente
+      parameters: []
+      responses:
+        '200':
+          description: Itens adicionados com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        quantity:
+                          type: integer
+                        unit_price:
+                          type: number
+                          format: float
+                        total_price:
+                          type: number
+                          format: float
+                  total_price:
+                    type: number
+                    format: float
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: O produto não foi encontrado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                  example: 1
+                  description: ID do produto
+                quantity:
+                  type: integer
+                  example: 3
+                  description: Quantidade a adicionar
+              required:
+              - product_id
+              - quantity
+  "/cart/{product_id}":
+    parameters:
+    - name: product_id
+      in: path
+      description: ID do produto a ser removido
+      required: true
+      schema:
+        type: integer
+    delete:
+      summary: Remove produto do carrinho
+      tags:
+      - Carrinho
+      description: Remove completamente um produto do carrinho
+      responses:
+        '200':
+          description: Produto removido com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        quantity:
+                          type: integer
+                        unit_price:
+                          type: number
+                          format: float
+                        total_price:
+                          type: number
+                          format: float
+                  total_price:
+                    type: number
+                    format: float
+        '404':
+          description: Item não encontrado no carrinho
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Item não encontrado no carrinho
+  "/products":
+    get:
+      summary: Lista todos os produtos
+      tags:
+      - Produtos
+      description: Retorna a lista de todos os produtos disponíveis
+      responses:
+        '200':
+          description: Produtos listados com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Produto Exemplo
+                    price:
+                      type: string
+                      example: '29.99'
+                    created_at:
+                      type: string
+                      format: datetime
+                      example: '2024-01-01T10:00:00Z'
+                    updated_at:
+                      type: string
+                      format: datetime
+                      example: '2024-01-01T10:00:00Z'
+    post:
+      summary: Cria um novo produto
+      tags:
+      - Produtos
+      description: Cria um novo produto com nome e preço
+      parameters: []
+      responses:
+        '201':
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Smartphone XYZ
+                  price:
+                    type: string
+                    example: '899.99'
+                  created_at:
+                    type: string
+                    format: datetime
+                  updated_at:
+                    type: string
+                    format: datetime
+        '422':
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - can't be blank
+                  price:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - must be greater than 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Smartphone XYZ
+                    price:
+                      type: number
+                      format: float
+                      example: 899.99
+                  required:
+                  - name
+                  - price
+  "/products/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: ID do produto
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Mostra um produto específico
+      tags:
+      - Produtos
+      description: Retorna os detalhes de um produto específico
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Notebook ABC
+                  price:
+                    type: string
+                    example: '1299.99'
+                  created_at:
+                    type: string
+                    format: datetime
+                  updated_at:
+                    type: string
+                    format: datetime
+        '404':
+          description: Produto não encontrado
+    put:
+      summary: Atualiza um produto
+      tags:
+      - Produtos
+      description: Atualiza as informações de um produto existente
+      parameters: []
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                    example: Tablet Premium
+                  price:
+                    type: string
+                    example: '599.99'
+                  created_at:
+                    type: string
+                    format: datetime
+                  updated_at:
+                    type: string
+                    format: datetime
+        '422':
+          description: Dados inválidos
+        '404':
+          description: Produto não encontrado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Tablet Premium
+                    price:
+                      type: number
+                      format: float
+                      example: 599.99
+    delete:
+      summary: Remove um produto
+      tags:
+      - Produtos
+      description: Remove um produto do sistema
+      responses:
+        '204':
+          description: Produto removido com sucesso
+        '404':
+          description: Produto não encontrado
+servers:
+- url: http://localhost:3000
+  description: Servidor de desenvolvimento
+- url: https://{defaultHost}
+  description: Servidor de produção
+  variables:
+    defaultHost:
+      default: api.example.com
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Produto Exemplo
+        price:
+          type: number
+          format: float
+          example: 29.99
+        created_at:
+          type: string
+          format: datetime
+        updated_at:
+          type: string
+          format: datetime
+      required:
+      - id
+      - name
+      - price
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Produto Exemplo
+        quantity:
+          type: integer
+          example: 2
+        unit_price:
+          type: number
+          format: float
+          example: 29.99
+        total_price:
+          type: number
+          format: float
+          example: 59.98
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        products:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CartItem"
+        total_price:
+          type: number
+          format: float
+          example: 59.98
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Mensagem de erro

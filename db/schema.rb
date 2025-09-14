@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_13_171853) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status", default: "active", null: false
-    t.datetime "last_activity_at"
+    t.datetime "last_interaction_at"
   end
 
   create_table "products", force: :cascade do |t|
