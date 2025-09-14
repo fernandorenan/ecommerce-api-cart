@@ -1,5 +1,10 @@
 class CartsController < ApplicationController
-  before_action :set_cart, only: %i[list_cart add_item remove_product]
+  before_action :set_cart, only: %i[show add_item remove_product]
+
+  def show
+    return render_cart_not_found unless @cart
+    render json: cart_serializer(@cart)
+  end
 
   def create 
     cart = Cart.find_or_create_by(id: session[:id]) do |c|
@@ -17,18 +22,16 @@ class CartsController < ApplicationController
     add_or_update_cart_item(cart,product) if params[:quantity]
   end
 
-  def list_cart
-    return render_cart_not_found unless @cart
-    render json: cart_serializer(@cart)
-  end
-
   def add_item
     return render_cart_not_found unless @cart
 
     product = product_exists?
     return unless product
 
-    add_or_update_cart_item(@cart,product)
+    add_or_update_cart_item(@cart, product)
+
+    @cart.update_total_price!
+    @cart.touch_activity!
   end
 
   def remove_product

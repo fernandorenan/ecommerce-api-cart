@@ -4,18 +4,24 @@ class MarkCartAsAbandonedJob
   queue_as :default
 
   def perform(*args)
-    # TODO Impletemente um Job para gerenciar, marcar como abandonado. E remover carrinhos sem interação.
+    mark_inactive_carts_as_abandoned
+    remove_old_abandoned_carts
+  end
 
-    carts = Cart.where(last_activity_at: ..3.hours.ago).where(status: 'active')
+  private
+
+  def mark_inactive_carts_as_abandoned
+    carts = Cart.where(last_interaction_at: ..3.hours.ago).where(status: 'active')
     carts.each do |cart|
-      cart.mark_as_abandoned!
+      cart.mark_as_abandoned
       Rails.logger.debug { "Cart #{cart.id} marked as abandoned." }
-    end 
+    end
+  end
 
-    # Remover carrinhos abandonados após 1 hora
-    abandoned_carts = Cart.where(last_activity_at: ..7.days.ago).where(status: 'abandoned')
+  def remove_old_abandoned_carts
+    abandoned_carts = Cart.where(last_interaction_at: ..7.days.ago).where(status: 'abandoned')
     abandoned_carts.each do |cart|
-      cart.destroy
+      cart.remove_if_abandoned
       Rails.logger.debug { "Abandoned cart #{cart.id} removed." }
     end
   end

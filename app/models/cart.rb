@@ -8,8 +8,12 @@ class Cart < ApplicationRecord
     update(total_price: cart_items.sum('quantity * unit_price'))
   end
 
-  def mark_as_abandoned!
+  def mark_as_abandoned
     update!(status: :abandoned)
+  end
+
+  def remove_if_abandoned
+    destroy if abandoned?
   end
 
   def abandoned?
@@ -17,6 +21,6 @@ class Cart < ApplicationRecord
   end
  
   def touch_activity!
-    update(last_activity_at: Time.current, status: :active)
+    update(last_interaction_at: Time.current, status: :active)
   end
 end
