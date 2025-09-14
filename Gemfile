@@ -13,7 +13,7 @@ gem 'sidekiq-scheduler', '~> 5.0', '>= 5.0.3'
 
 gem 'guard'
 gem 'guard-livereload', require: false
-
+gem 'rswag'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
@@ -21,7 +21,6 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'factory_bot_rails'
-  gem 'rswag'
 end
 
 group :development do
