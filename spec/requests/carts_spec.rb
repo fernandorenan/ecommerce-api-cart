@@ -46,7 +46,7 @@ RSpec.describe "/carts", type: :request do
 
         expect(response).to have_http_status(:not_found)
         json_response = response.parsed_body
-        expect(json_response).to eq({ 'error' => 'O produto não foi encontrado' })
+        expect(json_response).to eq({ 'error' => I18n.t('controllers.carts.errors.product_not_found') })
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe "/carts", type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = response.parsed_body
-        expect(json_response).to eq({ 'error' => 'A quantidade deve ser maior que zero' })
+        expect(json_response).to eq({ 'error' => I18n.t('controllers.carts.errors.invalid_quantity') })
       end
 
       it "returns quantity validation error when quantity is negative" do
@@ -64,7 +64,7 @@ RSpec.describe "/carts", type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = response.parsed_body
-        expect(json_response).to eq({ 'error' => 'A quantidade deve ser maior que zero' })
+        expect(json_response).to eq({ 'error' => I18n.t('controllers.carts.errors.invalid_quantity') })
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe "/carts", type: :request do
 
         expect(response).to have_http_status(:not_found)
         json_response = response.parsed_body
-        expect(json_response).to eq({ 'error' => 'O produto não foi encontrado' })
+        expect(json_response).to eq({ 'error' => I18n.t('controllers.carts.errors.product_not_found') })
       end
     end
   end

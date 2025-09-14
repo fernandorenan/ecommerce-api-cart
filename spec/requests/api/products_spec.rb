@@ -1,6 +1,6 @@
 require 'swagger_helper'
 
-RSpec.describe 'Products API', type: :request do
+RSpec.describe 'Products API', type: :request do # rubocop:disable Metrics/BlockLength
   path '/products' do
     get 'Lista todos os produtos' do
       tags 'Produtos'
@@ -14,7 +14,7 @@ RSpec.describe 'Products API', type: :request do
                  properties: {
                    id: { type: :integer, example: 1 },
                    name: { type: :string, example: 'Produto Exemplo' },
-                   price: { type: :number, format: :float, example: 29.99 },
+                   price: { type: :string, example: '29.99' },
                    created_at: { type: :string, format: :datetime, example: '2024-01-01T10:00:00Z' },
                    updated_at: { type: :string, format: :datetime, example: '2024-01-01T10:00:00Z' }
                  }
@@ -45,7 +45,7 @@ RSpec.describe 'Products API', type: :request do
               name: { type: :string, example: 'Smartphone XYZ' },
               price: { type: :number, format: :float, example: 899.99 }
             },
-            required: ['name', 'price']
+            required: %w[name price]
           }
         }
       }
@@ -55,7 +55,7 @@ RSpec.describe 'Products API', type: :request do
                properties: {
                  id: { type: :integer, example: 1 },
                  name: { type: :string, example: 'Smartphone XYZ' },
-                 price: { type: :number, format: :float, example: 899.99 },
+                 price: { type: :string, example: '899.99' },
                  created_at: { type: :string, format: :datetime },
                  updated_at: { type: :string, format: :datetime }
                }
@@ -65,7 +65,7 @@ RSpec.describe 'Products API', type: :request do
         run_test! do |response|
           data = JSON.parse(response.body)
           expect(data['name']).to eq('Smartphone XYZ')
-          expect(data['price']).to eq(899.99)
+          expect(data['price']).to eq('899.99')
         end
       end
 
@@ -96,7 +96,7 @@ RSpec.describe 'Products API', type: :request do
                properties: {
                  id: { type: :integer, example: 1 },
                  name: { type: :string, example: 'Notebook ABC' },
-                 price: { type: :number, format: :float, example: 1299.99 },
+                 price: { type: :string, example: '1299.99' },
                  created_at: { type: :string, format: :datetime },
                  updated_at: { type: :string, format: :datetime }
                }
@@ -111,7 +111,7 @@ RSpec.describe 'Products API', type: :request do
       end
 
       response 404, 'Produto não encontrado' do
-        let(:id) { 999999 }
+        let(:id) { 999_999 }
         run_test!
       end
     end
@@ -140,7 +140,7 @@ RSpec.describe 'Products API', type: :request do
                properties: {
                  id: { type: :integer },
                  name: { type: :string, example: 'Tablet Premium' },
-                 price: { type: :number, format: :float, example: 599.99 },
+                 price: { type: :string, example: '599.99' },
                  created_at: { type: :string, format: :datetime },
                  updated_at: { type: :string, format: :datetime }
                }
@@ -152,7 +152,7 @@ RSpec.describe 'Products API', type: :request do
         run_test! do |response|
           data = JSON.parse(response.body)
           expect(data['name']).to eq('Tablet Premium')
-          expect(data['price']).to eq(599.99)
+          expect(data['price']).to eq('599.99')
         end
       end
 
@@ -164,7 +164,7 @@ RSpec.describe 'Products API', type: :request do
       end
 
       response 404, 'Produto não encontrado' do
-        let(:id) { 999999 }
+        let(:id) { 999_999 }
         let(:product) { { product: { name: 'Test' } } }
         run_test!
       end
@@ -181,7 +181,7 @@ RSpec.describe 'Products API', type: :request do
       end
 
       response 404, 'Produto não encontrado' do
-        let(:id) { 999999 }
+        let(:id) { 999_999 }
         run_test!
       end
     end

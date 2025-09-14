@@ -28,4 +28,45 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      product: "Product"
+      cart: "Cart"
+      cart_item: "Cart item"
+    attributes:
+      product:
+        name: "Name"
+        price: "Price"
+      cart:
+        total_price: "Total price"
+      cart_item:
+        quantity: "Quantity"
+        unit_price: "Unit price"
+    errors:
+      models:
+        product:
+          attributes:
+            name:
+              blank: "can't be blank"
+            price:
+              blank: "can't be blank"
+              greater_than_or_equal_to: "must be greater than or equal to %{count}"
+        cart:
+          attributes:
+            total_price:
+              greater_than_or_equal_to: "must be greater than or equal to %{count}"
+
+  errors:
+    messages:
+      blank: "can't be blank"
+      greater_than_or_equal_to: "must be greater than or equal to %{count}"
+
+  controllers:
+    carts:
+      errors:
+        cart_not_found: "Cart not found"
+        product_not_found: "Product not found"
+        item_not_found: "Item not found in cart"
+        invalid_quantity: "Quantity must be greater than zero"
+      messages:
+        empty_cart: "Empty cart"

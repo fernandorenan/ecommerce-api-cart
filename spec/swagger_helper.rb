@@ -53,7 +53,7 @@ RSpec.configure do |config|
               created_at: { type: :string, format: :datetime },
               updated_at: { type: :string, format: :datetime }
             },
-            required: ['id', 'name', 'price']
+            required: %w[id name price]
           },
           CartItem: {
             type: :object,

@@ -32,5 +32,10 @@ module Store
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
     config.active_job.queue_adapter = :sidekiq
+    
+    # Internationalization configuration
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+    config.i18n.available_locales = [:en, :'pt-BR']
+    config.i18n.default_locale = :'pt-BR'
   end
 end

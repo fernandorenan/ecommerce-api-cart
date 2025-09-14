@@ -1,7 +1,7 @@
 require 'swagger_helper'
 
-RSpec.describe 'Carts API', type: :request do
-  path '/cart' do
+RSpec.describe 'Carts API', type: :request do # rubocop:disable Metrics/BlockLength
+  path '/cart' do # rubocop:disable Metrics/BlockLength
     get 'Visualiza o carrinho atual' do
       tags 'Carrinho'
       description 'Retorna o conteúdo do carrinho da sessão atual'
@@ -56,7 +56,7 @@ RSpec.describe 'Carts API', type: :request do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          expect(data['message']).to eq('Carrinho vazio')
+          expect(data['message']).to eq(I18n.t('controllers.carts.messages.empty_cart'))
         end
       end
 
@@ -86,7 +86,7 @@ RSpec.describe 'Carts API', type: :request do
           product_id: { type: :integer, example: 1, description: 'ID do produto a ser adicionado' },
           quantity: { type: :integer, example: 2, description: 'Quantidade do produto' }
         },
-        required: ['product_id', 'quantity']
+        required: %w[product_id quantity]
       }
 
       response 200, 'Produto adicionado ao carrinho' do
@@ -125,7 +125,7 @@ RSpec.describe 'Carts API', type: :request do
                  error: { type: :string, example: 'O produto não foi encontrado' }
                }
 
-        let(:cart_params) { { product_id: 999999, quantity: 1 } }
+        let(:cart_params) { { product_id: 999_999, quantity: 1 } }
         run_test!
       end
 
@@ -155,7 +155,7 @@ RSpec.describe 'Carts API', type: :request do
           product_id: { type: :integer, example: 1, description: 'ID do produto' },
           quantity: { type: :integer, example: 3, description: 'Quantidade a adicionar' }
         },
-        required: ['product_id', 'quantity']
+        required: %w[product_id quantity]
       }
 
       response 200, 'Itens adicionados com sucesso' do
@@ -189,7 +189,7 @@ RSpec.describe 'Carts API', type: :request do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          expect(data['products'].first['quantity']).to eq(3)  # 1 + 2
+          expect(data['products'].first['quantity']).to eq(3) # 1 + 2
         end
       end
 
@@ -216,7 +216,7 @@ RSpec.describe 'Carts API', type: :request do
                }
 
         let!(:cart) { create(:cart) }
-        let(:add_item_params) { { product_id: 999999, quantity: 1 } }
+        let(:add_item_params) { { product_id: 999_999, quantity: 1 } }
 
         before do
           allow_any_instance_of(CartsController).to receive(:session).and_return({ id: cart.id })
@@ -268,7 +268,7 @@ RSpec.describe 'Carts API', type: :request do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          product_ids = data['products'].map { |p| p['id'] }
+          product_ids = data['products'].pluck('id')
           expect(product_ids).not_to include(product1.id)
           expect(product_ids).to include(product2.id)
         end
@@ -296,7 +296,7 @@ RSpec.describe 'Carts API', type: :request do
                }
 
         let!(:cart) { create(:cart) }
-        let(:product_id) { 999999 }
+        let(:product_id) { 999_999 }
 
         before do
           allow_any_instance_of(CartsController).to receive(:session).and_return({ id: cart.id })

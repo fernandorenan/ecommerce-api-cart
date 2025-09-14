@@ -1,0 +1,43 @@
+pt-BR:
+  activerecord:
+    models:
+      product: "Produto"
+      cart: "Carrinho"
+      cart_item: "Item do carrinho"
+    attributes:
+      product:
+        name: "Nome"
+        price: "Preço"
+      cart:
+        total_price: "Preço total"
+      cart_item:
+        quantity: "Quantidade"
+        unit_price: "Preço unitário"
+    errors:
+      models:
+        product:
+          attributes:
+            name:
+              blank: "não pode ficar em branco"
+            price:
+              blank: "não pode ficar em branco"
+              greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
+        cart:
+          attributes:
+            total_price:
+              greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
+
+  errors:
+    messages:
+      blank: "não pode ficar em branco"
+      greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
+
+  controllers:
+    carts:
+      errors:
+        cart_not_found: "Carrinho não encontrado"
+        product_not_found: "O produto não foi encontrado"
+        item_not_found: "Item não encontrado no carrinho"
+        invalid_quantity: "A quantidade deve ser maior que zero"
+      messages:
+        empty_cart: "Carrinho vazio"

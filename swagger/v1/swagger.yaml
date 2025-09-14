@@ -284,9 +284,8 @@ paths:
                       type: string
                       example: Produto Exemplo
                     price:
-                      type: number
-                      format: float
-                      example: 29.99
+                      type: string
+                      example: '29.99'
                     created_at:
                       type: string
                       format: datetime
@@ -316,9 +315,8 @@ paths:
                     type: string
                     example: Smartphone XYZ
                   price:
-                    type: number
-                    format: float
-                    example: 899.99
+                    type: string
+                    example: '899.99'
                   created_at:
                     type: string
                     format: datetime
@@ -391,9 +389,8 @@ paths:
                     type: string
                     example: Notebook ABC
                   price:
-                    type: number
-                    format: float
-                    example: 1299.99
+                    type: string
+                    example: '1299.99'
                   created_at:
                     type: string
                     format: datetime
@@ -422,9 +419,8 @@ paths:
                     type: string
                     example: Tablet Premium
                   price:
-                    type: number
-                    format: float
-                    example: 599.99
+                    type: string
+                    example: '599.99'
                   created_at:
                     type: string
                     format: datetime

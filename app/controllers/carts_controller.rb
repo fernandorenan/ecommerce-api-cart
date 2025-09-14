@@ -17,7 +17,7 @@ class CartsController < ApplicationController
     return unless product
 
     if quantity = params[:quantity].to_i <= 0
-      return render json: { error: 'A quantidade deve ser maior que zero' }, status: :unprocessable_entity 
+      return render json: { error: I18n.t('controllers.carts.errors.invalid_quantity') }, status: :unprocessable_entity 
     end
     add_or_update_cart_item(cart,product) if params[:quantity]
   end
@@ -38,10 +38,10 @@ class CartsController < ApplicationController
     return render_cart_not_found unless @cart
 
     product = Product.find_by(id: params[:product_id])
-    return render json: { error: 'O produto não foi encontrado' }, status: :not_found unless product
+    return render json: { error: I18n.t('controllers.carts.errors.product_not_found') }, status: :not_found unless product
 
     cart_item = @cart.cart_items.find_by(product_id: product.id)
-    return render json: { error: 'Item não encontrado no carrinho' }, status: :not_found unless cart_item
+    return render json: { error: I18n.t('controllers.carts.errors.item_not_found') }, status: :not_found unless cart_item
 
     cart_item.destroy
     @cart.update_total_price!
@@ -58,7 +58,7 @@ class CartsController < ApplicationController
 
   def cart_serializer(cart)
     if cart.cart_items.empty?
-      return { message: 'Carrinho vazio' }
+      return { message: I18n.t('controllers.carts.messages.empty_cart') }
     end
     {
       id: cart.id,
@@ -79,11 +79,11 @@ class CartsController < ApplicationController
     product = Product.find_by(id: params[:product_id])
     return product if product
 
-    render json: { error: 'O produto não foi encontrado' }, status: :not_found
+    render json: { error: I18n.t('controllers.carts.errors.product_not_found') }, status: :not_found
     return false
   end
 
-  def add_or_update_cart_item(cart,product)
+  def add_or_update_cart_item(cart,product) # rubocop:disable Metrics/AbcSize
     cart_item = cart.cart_items.find_by(product_id: product.id)
 
     if cart_item
@@ -96,7 +96,7 @@ class CartsController < ApplicationController
       end
     else
       quantity = params[:quantity].to_i
-      return render json: { error: 'A quantidade deve ser maior que zero' }, status: :unprocessable_entity if quantity <= 0
+      return render json: { error: I18n.t('controllers.carts.errors.invalid_quantity') }, status: :unprocessable_entity if quantity <= 0
 
       cart.cart_items.create!(product: product, quantity: params[:quantity], unit_price: product.price)
     end
@@ -105,6 +105,6 @@ class CartsController < ApplicationController
   end
 
   def render_cart_not_found
-    render json: { error: 'Carrinho não encontrado' }, status: :not_found
+    render json: { error: I18n.t('controllers.carts.errors.cart_not_found') }, status: :not_found
   end
 end
