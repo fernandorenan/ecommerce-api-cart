@@ -1,0 +1,17 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rails
+
+AllCops:
+  TargetRubyVersion: 3.2   # ajuste para sua versão do Ruby
+  NewCops: enable
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/*'
+    - 'config/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'db/migrate/*'
+    - 'db/seeds.rb'
+    - 'Gemfile'

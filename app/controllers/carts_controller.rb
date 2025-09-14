@@ -77,7 +77,7 @@ class CartsController < ApplicationController
     return product if product
 
     render json: { error: 'O produto não foi encontrado' }, status: :not_found
-    return nil
+    return false
   end
 
   def add_or_update_cart_item(cart,product)
