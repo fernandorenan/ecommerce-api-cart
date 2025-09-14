@@ -1,7 +1,6 @@
 class Cart < ApplicationRecord
   validates_numericality_of :total_price, greater_than_or_equal_to: 0
   has_many :cart_items, dependent: :destroy
-  # TODO: lógica para marcar o carrinho como abandonado e remover se abandonado
 
   enum status: { active: 'active', abandoned: 'abandoned', completed: 'completed' }
 
@@ -15,5 +14,9 @@ class Cart < ApplicationRecord
 
   def abandoned?
     status == 'abandoned'
+  end
+ 
+  def touch_activity!
+    update(last_activity_at: Time.current, status: :active)
   end
 end

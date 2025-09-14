@@ -11,7 +11,7 @@
 :scheduler:
   :schedule:
     mark_cart_as_abandoned_job:
-      cron: "*0 * * * *"
+      cron: "0 * * * *"
       class: "MarkCartAsAbandonedJob"
       queue: default
       description: "Marks carts as abandoned if they have been inactive for more than 3 hours and deletes carts abandoned for more than 7 days"
